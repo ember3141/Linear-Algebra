@@ -1,0 +1,17 @@
+- [x] standard representing a point from 2 non unit vectors via scaling
+- [ ] represent that you can touch all places using the above technique
+- [ ] how row reduction changes the col space but not the row space/dimention/rank/span (this is really important because i dont see anyone else graphically displaying it)
+- [ ] matrix of a one to one linear transformation. I really like what he did with his nonlinear matrix transformations, i can do something like that
+- [ ] represent elementary matricies geometrically
+- [ ] I know blue brown did this already, but represent the null space. im not sure if he actually shows going from the domain to the codomain, i will be doing that though
+- [ ] show that matricies that are independent do not flatten, and matracies that are dependent, the vectors that are free variables flatten down and the basis vectors really define the space. genuinely no clue how to do this in 2d I will need to do this in 3d
+- [ ] I will have to do malo's favorite thing, which is the economics supply and demand thing. I can do a simulation. what confused me the most is how an industry can take up its own resources. i can animate that
+- [ ] subspace, perhaps I can show how the nullspace is a subspace of A
+- [ ] obviously show image and geometry and stuff being transformed by matrix, should be super easy. go a step beyond what nicky cage did and actually describe each parameter. I had to experiment a ton to figure it out
+- [ ] matrix factorization, I have no idea how to represent this graphically. go look on page 126, i understand that the three matrix equations Ly=b and Ux=y and Ax=B are traverseable using multiplication, but i dont know how to intuitively represent this interactively
+- [ ] I'm not sure if this is possible, but yk how that one website did an animation of matrix multiplication and showed the result in real time? maybe I can show two matricies or images graphically and show their matricies being multiplied in real time and the result. also something I disliked about that demo was it was hard to follow because they multiplied the entire matrix at once, while I usually do row1xcol1, row1xcol2, row2xcol1, row2xcol2. that is probably sufficiant to be unique, no need to go crazy on each of these.
+- [ ] not sure how to do this but somehow show that a vector can be within the span of a matrix. this is when you augment the matrix with the vector you are checking and you check if its consistant or not
+- [ ] try to do something with consistant, unique and inconsistant?
+- [ ] 100% show graphically what different determinants mean. that interactive linear textbook did that already but I can show it better
+- [ ] smth to do with rank idk
+- [ ] I wanna do the dimention flattening demo, flatland, and tie it into what happens when you flatten a matrix or smth
