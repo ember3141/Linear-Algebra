@@ -24,8 +24,30 @@ function draw() {
             translate(width / 2, height / 2);
             
             const m0 = mouseVec();
-            // Draw preview using helper
-            drawPreviewVector(m0, color(255, 100, 100));
+            stroke(color(255, 100, 100));
+            strokeWeight(2);
+            line(0, 0, m0.x, m0.y);
+            
+            // Draw arrow head for preview
+            push();
+            translate(m0.x, m0.y);
+            rotate(m0.heading());
+            fill(color(255, 100, 100));
+            noStroke();
+            triangle(0, 5, 0, -5, 10, 0);
+            pop();
+            
+            // Draw matrix notation for preview
+            const x0 = m0.x + 40;
+            const y0 = m0.y;
+            drawBrackets(x0, y0);
+            fill(255);
+            noStroke();
+            textSize(16);
+            textAlign(CENTER, CENTER);
+            text(m0.x.toFixed(0), x0 + 7, y0 - 7);
+            text((-m0.y).toFixed(0), x0 + 7, y0 + 10);
+            textSize(14);
             break;
             
         case 1:
@@ -37,8 +59,30 @@ function draw() {
             translate(width / 2, height / 2);
             
             const m1 = mouseVec();
-            // Draw preview using helper
-            drawPreviewVector(m1, color(100, 150, 255));
+            stroke(color(100, 150, 255));
+            strokeWeight(2);
+            line(0, 0, m1.x, m1.y);
+            
+            // Draw arrowhead for preview
+            push();
+            translate(m1.x, m1.y);
+            rotate(m1.heading());
+            fill(color(100, 150, 255));
+            noStroke();
+            triangle(0, 5, 0, -5, 10, 0);
+            pop();
+            
+            // Draw matrix notation for preview
+            const x1 = m1.x + 40;
+            const y1 = m1.y;
+            drawBrackets(x1, y1);
+            fill(255);
+            noStroke();
+            textSize(16);
+            textAlign(CENTER, CENTER);
+            text(m1.x.toFixed(0), x1 + 7, y1 - 7);
+            text((-m1.y).toFixed(0), x1 + 7, y1 + 10);
+            textSize(14);
             break;
             
         case 2:
@@ -54,30 +98,8 @@ function draw() {
                 step = 3;
             }
             break;
+            
         case 3:
-
-            v1.drawWithMatrix(color(255, 100, 100));
-            v2.drawWithMatrix(color(100, 150, 255));
-            
-            
-            const tip2 = v2.tip();
-            push();
-            fill(255);
-            noStroke();
-            textSize(16);
-            textAlign(CENTER, BOTTOM);
-            text("place your mouse here", tip2.x - textWidth("place your mouse here") / 2, tip2.y - 10);
-
-            circle(tip2.x, tip2.y, -sin(frameCount * 15) * 7 + 7);
-            pop();
-
-            const cursor = mouseVec();
-            if (p5.Vector.dist(cursor, tip2) <= 5) {
-                step = 4;
-            }
-
-            break;            
-        case 4:
             // Solve s1*v1_original + s2*v2_original = mouse using Cramer's rule
             const m = mouseVec();
             const det = v1.original.x * v2.original.y - v1.original.y * v2.original.x;
@@ -92,7 +114,7 @@ function draw() {
                 v2.offset = v1.vec.copy();
             } else {
                 push();
-                textSize(30);
+                textSize(22);
                 fill('orange');
                 text("vectors are parallel !!! click to reset", 0, 0);
                 pop();
@@ -106,7 +128,7 @@ function draw() {
             noStroke();
             textSize(16);
             textAlign(CENTER, CENTER);
-            text("(" + m.x.toFixed(0) + ", " + (-m.y).toFixed(0) + ")", m.x-35, m.y-15);
+            text("(" + m.x.toFixed(0) + ", " + (-m.y).toFixed(0) + ")", m.x, m.y - 20);
             textSize(14);
             
             resetMatrix();
@@ -127,11 +149,6 @@ function mousePressed() {
         case 1:
             v2 = new Vector(mouseVec());
             step = 2;
-            break;
-        case 2:
-            break;
-        case 3:
-            step++;
             break;
         default:
             step = 0;
@@ -154,33 +171,29 @@ class Vector {
         this.scale = s;
         this.offset = createVector(0, 0);
     }
-
-    tip() {
-        return p5.Vector.add(this.offset, this.vec);
-    }
     
     draw(col) {
-    const tail = this.offset;
-    const tip = this.tip();
+        const tail = this.offset;
+        const tip = p5.Vector.add(this.offset, this.vec);
         
         // Draw line
         stroke(col);
         strokeWeight(3);
         line(tail.x, tail.y, tip.x, tip.y);
         
-    // Arrowhead 
-    push();
-    translate(tip.x, tip.y);
-    rotate(this.vec.heading());
-    fill(col);
-    noStroke();
-    triangle(0, 0, -10, 6, -10, -6);
-    pop();
+        // Arrowhead
+        push();
+        translate(tip.x, tip.y);
+        rotate(this.vec.heading());
+        fill(col);
+        noStroke();
+        triangle(0, 5, 0, -5, 10, 0);
+        pop();
     }
     
     drawWithMatrix(col) {
         this.draw(col);
-    const tip = this.tip();
+        const tip = p5.Vector.add(this.offset, this.vec);
         const x = tip.x + 40;
         const y = tip.y;
         drawBrackets(x, y);
@@ -196,8 +209,8 @@ class Vector {
     
     drawWithScaleAndMatrix(col) {
         this.draw(col);
-    const tip = this.tip();
-    const mid = p5.Vector.add(this.offset, tip).div(2);
+        const tip = p5.Vector.add(this.offset, this.vec);
+        const mid = p5.Vector.add(this.offset, tip).div(2);
         const x = tip.x + 40;
         const y = tip.y;
         drawBrackets(x, y);
@@ -236,32 +249,4 @@ function drawBrackets(x, y) {
 
 function mouseVec() {
     return createVector(mouseX - width / 2, mouseY - height / 2);
-}
-
-// Helper to draw a preview vector (line, arrowhead, and matrix notation)
-function drawPreviewVector(tip, col) {
-    stroke(col);
-    strokeWeight(2);
-    line(0, 0, tip.x, tip.y);
-
-    // Arrowhead (tip at 0,0; base behind at -10)
-    push();
-    translate(tip.x, tip.y);
-    rotate(tip.heading());
-    fill(col);
-    noStroke();
-    triangle(0, 0, -10, 6, -10, -6);
-    pop();
-
-    // matrix notation near the tip
-    const x = tip.x + 40;
-    const y = tip.y;
-    drawBrackets(x, y);
-    fill(255);
-    noStroke();
-    textSize(16);
-    textAlign(CENTER, CENTER);
-    text(tip.x.toFixed(0), x + 7, y - 7);
-    text((-tip.y).toFixed(0), x + 7, y + 10);
-    textSize(14);
 }
