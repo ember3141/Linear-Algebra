@@ -1,0 +1,151 @@
+let step = 0; //first set red then set blue then do the animation then scale demo
+let v1, v2;
+
+function setup() {
+    createCanvas(800, 600);
+    angleMode(DEGREES);
+    textAlign(CENTER, CENTER);
+    textSize(14);
+}
+
+function draw() {
+    background(10);
+    translate(width / 2, height / 2);
+    stroke(100);
+    line(-width / 2, 0, width / 2, 0);
+    line(0, -height / 2, 0, height / 2);
+    
+    switch (step) {
+        case 0:
+            resetMatrix();
+            fill(255);
+            noStroke();
+            text("Click to set the red vector", width / 2, 25);
+            translate(width / 2, height / 2);
+            drawPreview(mouseVec(), color(255, 100, 100));
+            break;
+            
+        case 1:
+            v1.draw(color(255, 100, 100));
+            resetMatrix();
+            fill(255);
+            noStroke();
+            text("Click to set the blue vector", width / 2, 25);
+            translate(width / 2, height / 2);
+            drawPreview(mouseVec(), color(100, 150, 255));
+            break;
+            
+        case 2:
+            const dist = p5.Vector.dist(v2.offset, v1.vec);
+            const t = dist > 7 ? 0.08 : 0.15;
+            v2.offset.lerp(v1.vec, t);
+            
+            v1.draw(color(255, 100, 100));
+            v2.draw(color(100, 150, 255));
+            
+            if (dist < 2) {
+                v2.offset = v1.vec.copy();
+                step = 3;
+            }
+            break;
+            
+        case 3:
+            // Solve s1*v1_original + s2*v2_original = mouse using Cramer's rule
+            const m = mouseVec();
+            const det = v1.original.x * v2.original.y - v1.original.y * v2.original.x;
+            
+            if (abs(det) > 0.001) {
+                // Cramer's rule
+                const s1 = (m.x * v2.original.y - m.y * v2.original.x) / det;
+                const s2 = (v1.original.x * m.y - v1.original.y * m.x) / det;
+                
+                v1.setScale(s1);
+                v2.setScale(s2);
+                v2.offset = v1.vec.copy();
+            } else {
+                push();
+                textSize(22);
+                fill('orange');
+                text("vectors are parallel !!! click to reset", 0, 0);
+                pop();
+            }
+            
+            v1.draw(color(255, 100, 100));
+            v2.draw(color(100, 150, 255));
+            resetMatrix();
+            fill(255);
+            noStroke();
+            text("Move mouse to scale vectors. Click to reset.", width / 2, 25);
+            translate(width / 2, height / 2);
+            break;
+    }
+}
+
+function mousePressed() {
+    switch (step) {
+        case 0:
+            v1 = new Vector(mouseVec());
+            step = 1;
+            break;
+        case 1:
+            v2 = new Vector(mouseVec());
+            step = 2;
+            break;
+        default:
+            step = 0;
+            v1 = v2 = undefined;
+            break;
+    }
+}
+
+class Vector {
+    constructor(tip) {
+        this.vec = tip.copy();
+        this.original = tip.copy();
+        this.offset = createVector(0, 0);
+        this.scale = 1;
+    }
+    
+    setScale(s) {
+        this.vec = p5.Vector.mult(this.original, s);
+        this.scale = s;
+        this.offset = createVector(0, 0);
+    }
+    
+    draw(col) {
+        const tail = this.offset;
+        const tip = p5.Vector.add(this.offset, this.vec);
+        
+        //  line
+        stroke(col);
+        strokeWeight(3);
+        line(tail.x, tail.y, tip.x, tip.y);
+        
+        //head
+        push();
+        translate(tip.x, tip.y);
+        rotate(this.vec.heading());
+        fill(col);
+        noStroke();
+        triangle(0, 5, 0, -5, 10, 0);
+        pop();
+        
+        // Labels
+        const mid = p5.Vector.add(tail, tip).div(2);
+        fill(255);
+        noStroke();
+        text("‖v‖=" + this.vec.mag().toFixed(1), mid.x, mid.y + 20);
+        text(this.scale.toFixed(2) + "×", mid.x, mid.y - 20);
+        text("(" + tip.x.toFixed(0) + "," + tip.y.toFixed(0) + ")", tip.x + 40, tip.y);
+    }
+}
+
+function drawPreview(tip, col) {
+    stroke(col);
+    strokeWeight(2);
+    line(0, 0, tip.x, tip.y);
+}
+
+function mouseVec() {
+    return createVector(mouseX - width / 2, mouseY - height / 2);
+}
