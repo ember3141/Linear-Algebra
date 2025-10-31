@@ -28,7 +28,7 @@ function draw() {
             strokeWeight(2);
             line(0, 0, m0.x, m0.y);
             
-            // Draw arrowhead for preview
+            // Draw arrow head for preview
             push();
             translate(m0.x, m0.y);
             rotate(m0.heading());
@@ -46,7 +46,7 @@ function draw() {
             textSize(16);
             textAlign(CENTER, CENTER);
             text(m0.x.toFixed(0), x0 + 7, y0 - 7);
-            text(m0.y.toFixed(0), x0 + 7, y0 + 10);
+            text((-m0.y).toFixed(0), x0 + 7, y0 + 10);
             textSize(14);
             break;
             
@@ -81,7 +81,7 @@ function draw() {
             textSize(16);
             textAlign(CENTER, CENTER);
             text(m1.x.toFixed(0), x1 + 7, y1 - 7);
-            text(m1.y.toFixed(0), x1 + 7, y1 + 10);
+            text((-m1.y).toFixed(0), x1 + 7, y1 + 10);
             textSize(14);
             break;
             
@@ -128,7 +128,7 @@ function draw() {
             noStroke();
             textSize(16);
             textAlign(CENTER, CENTER);
-            text("(" + m.x.toFixed(0) + ", " + m.y.toFixed(0) + ")", m.x, m.y - 20);
+            text("(" + m.x.toFixed(0) + ", " + (-m.y).toFixed(0) + ")", m.x, m.y - 20);
             textSize(14);
             
             resetMatrix();
@@ -202,8 +202,8 @@ class Vector {
         noStroke();
         textSize(16);
         textAlign(CENTER, CENTER);
-        text(this.vec.x.toFixed(0), x + 7, y - 7);
-        text(this.vec.y.toFixed(0), x + 7, y + 10);
+    text(this.vec.x.toFixed(0), x + 7, y - 7);
+    text((-this.vec.y).toFixed(0), x + 7, y + 10);
         textSize(14);
     }
     
@@ -219,8 +219,8 @@ class Vector {
         noStroke();
         textSize(16);
         textAlign(CENTER, CENTER);
-        text(this.vec.x.toFixed(0), x + 7, y - 7);
-        text(this.vec.y.toFixed(0), x + 7, y + 10);
+    text(this.vec.x.toFixed(0), x + 7, y - 7);
+    text((-this.vec.y).toFixed(0), x + 7, y + 10);
         text(this.scale.toFixed(2) + "×", mid.x, mid.y - 20);
         textSize(14);
     }
