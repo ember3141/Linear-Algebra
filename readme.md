@@ -1,5 +1,5 @@
 - [x] standard representing a point from 2 non unit vectors via scaling
-- [ ] represent that you can touch all places using the above technique
+- [x] represent that you can touch all places using the above technique
 - [ ] how row reduction changes the col space but not the row space/dimention/rank/span (this is really important because i dont see anyone else graphically displaying it)
 - [ ] matrix of a one to one linear transformation. I really like what he did with his nonlinear matrix transformations, i can do something like that
 - [ ] represent elementary matricies geometrically
